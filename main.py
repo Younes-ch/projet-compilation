@@ -35,14 +35,13 @@ def tokenize(string):
     if len(string) != sum(len(value) for kind, value in tokens):
             raise ValueError("La chaîne contient des caractères non valides.")
 
+    # Remove whitespaces
+    tokens = [token for token in tokens if token[0] != 'WHITESPACE']
+
     # On retourne la liste de tokens
     return tokens
 
 def check_order(tokens):
-    
-    # Remove whitespaces
-    tokens = [token for token in tokens if token[0] != 'WHITESPACE']
-
     # On définit les différents patterns
     precedent_correct_order = {
         'LEFT_PARENTHESIS' : ['KEYWORD', 'OPERATOR', 'LEFT_PARENTHESIS'],
@@ -72,28 +71,7 @@ def check_order(tokens):
         return False
     return True
 
-root = tk.Tk()
-root.configure(bg="#046380")
-root.geometry("500x500")
-root.resizable(False, False)
-root.title("Calculator")
 
-# Add the logo to the top middle of the frame
-logo_img = tk.PhotoImage(file="assets/calculator-logo.png")
-logo_label = tk.Label(root, image=logo_img, bg='#046380')
-logo_label.pack(side="top")
-
-# Input field and label
-input_label = tk.Label(root, text="Expression", bg="#046380", fg="#ffffff", font=Font(size=12, weight="bold"))
-input_label.pack(side="top")
-input_field = tk.Entry(root, width=30, borderwidth=2, foreground="#046380", background="#ffffff", highlightthickness=0, font=Font(size=12, weight="bold"))
-input_field.pack(side="top", pady=10)
-
-# Output field as a disabled entry
-output_label = tk.Label(root, text="Résultat", bg="#046380", fg="#ffffff", font=Font(size=12, weight="bold"))
-output_label.pack(side="top")
-output_field = tk.Entry(root, width=30, borderwidth=2, state='disabled', foreground="#046380", background="#ffffff", highlightthickness=0, font=Font(size=12, weight="bold"), disabledforeground="#046380")
-output_field.pack(side="top", pady=10)
 
 # Button to calculate the result
 def calculate():
@@ -118,7 +96,7 @@ def calculate():
     try:
         tokens = tokenize(input_string)
     except ValueError as e:
-        messagebox.showerror("Erreur", e)
+        messagebox.showerror("Erreur", str(e))
         return
 
     # Calculate the result
@@ -135,7 +113,34 @@ def calculate():
     output_field.insert(0, str(result))
     output_field.config(state='disabled')
 
-calculate_button = tk.Button(root, text="Calculer", padx=10, pady=10, command=calculate, bg="#046380", fg="#ffffff", activebackground="#ffffff", activeforeground="#046380", highlightthickness=0, font=Font(size=12, weight="bold"))
-calculate_button.pack(side="top", pady=10)
 
-root.mainloop()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.configure(bg="#046380")
+    root.geometry("500x500")
+    root.resizable(False, False)
+    root.title("Calculator")
+
+    # Add the logo to the top middle of the frame
+    logo_img = tk.PhotoImage(file="assets/calculator-logo.png")
+    logo_label = tk.Label(root, image=logo_img, bg='#046380')
+    logo_label.pack(side="top")
+
+    # Input field and label
+    input_label = tk.Label(root, text="Expression", bg="#046380", fg="#ffffff", font=Font(size=12, weight="bold"))
+    input_label.pack(side="top")
+    input_field = tk.Entry(root, width=30, borderwidth=2, foreground="#046380", background="#ffffff", highlightthickness=0, font=Font(size=12, weight="bold"))
+    input_field.pack(side="top", pady=10)
+
+    # Output field as a disabled entry
+    output_label = tk.Label(root, text="Résultat", bg="#046380", fg="#ffffff", font=Font(size=12, weight="bold"))
+    output_label.pack(side="top")
+    output_field = tk.Entry(root, width=30, borderwidth=2, state='disabled', foreground="#046380", background="#ffffff", highlightthickness=0, font=Font(size=12, weight="bold"), disabledforeground="#046380")
+    output_field.pack(side="top", pady=10)
+
+    # Calculate button
+    calculate_button = tk.Button(root, text="Calculer", padx=10, pady=10, command=calculate, bg="#046380", fg="#ffffff", activebackground="#ffffff", activeforeground="#046380", highlightthickness=0, font=Font(size=12, weight="bold"))
+    calculate_button.pack(side="top", pady=10)
+
+    root.mainloop()
